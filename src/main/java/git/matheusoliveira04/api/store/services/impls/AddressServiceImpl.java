@@ -1,11 +1,10 @@
 package git.matheusoliveira04.api.store.services.impls;
 
 import git.matheusoliveira04.api.store.models.Address;
-import git.matheusoliveira04.api.store.models.dtos.AddressViaCepResponse;
 import git.matheusoliveira04.api.store.repositories.AddressRepository;
 import git.matheusoliveira04.api.store.services.AddressService;
 import git.matheusoliveira04.api.store.services.excepitions.ObjectNotFoundException;
-import git.matheusoliveira04.api.store.services.facade.ViaCepClientServiceFacade;
+import git.matheusoliveira04.api.store.services.fetchers.CepServiceFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class AddressServiceImpl implements AddressService {
     private AddressRepository addressRepository;
 
     @Autowired
-    private ViaCepClientServiceFacade viaCepClientServiceFacade;
+    private CepServiceFetcher cepServiceFetcher;
 
     @Override
     public List<Address> findAll(Pageable pageable) {
@@ -40,13 +39,11 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address insert(Address address) {
-        this.getAddressByCep(address);
         return addressRepository.save(address);
     }
 
     @Override
     public Address update(Address address) {
-        this.getAddressByCep(address);
         this.findById(address.getId());
         return addressRepository.save(address);
     }
@@ -56,27 +53,10 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.delete(this.findById(id));
     }
 
-    private void getAddressByCep(Address address) {
+    private void findCepValid(Address address) {
         if (isCepNotEmpty(address.getCep())) {
-            AddressViaCepResponse addressViaCepResponse = fetchAddressByCep(address.getCep());
-            if (addressViaCepResponse != null) {
-               mapToAddress(addressViaCepResponse, address);
-            }
+            cepServiceFetcher.validateCep(address.getCep());
         }
-    }
-
-    private void mapToAddress(AddressViaCepResponse addressViaCepResponse, Address address) {
-        address.setUf(addressViaCepResponse.uf());
-        //address.setCep(addressViaCepResponse.cep());
-        address.setCity(addressViaCepResponse.localidade());
-        address.setNeighborhood(addressViaCepResponse.bairro());
-        address.setStreet(addressViaCepResponse.logradouro());
-        address.setDescription(addressViaCepResponse.complemento());
-        address.setNumber(address.getNumber());
-    }
-
-    private AddressViaCepResponse fetchAddressByCep(String cep) {
-        return viaCepClientServiceFacade.getAddressByCep(cep);
     }
 
     private Boolean isCepNotEmpty(String cep) {
