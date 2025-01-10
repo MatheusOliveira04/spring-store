@@ -13,20 +13,15 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id", callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Entity(name = "tb_client")
 public class Client extends Person{
-
-    @Id @Setter
-    @GeneratedValue
-    private UUID id;
 
     @Size(min = 11, max = 11)
     private String cpf;
 
     public Client(ClientRequest clientRequest, Address addresses) {
-        super(clientRequest.name(), clientRequest.telephone(), addresses, clientRequest.dateOfBirth(), clientRequest.email());
-        this.id = clientRequest.id();
+        super(clientRequest.id(), clientRequest.name(), clientRequest.telephone(), addresses, clientRequest.dateOfBirth(), clientRequest.email());
         this.cpf = clientRequest.cpf();
     }
 

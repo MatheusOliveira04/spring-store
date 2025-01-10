@@ -1,27 +1,34 @@
 package git.matheusoliveira04.api.store.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @MappedSuperclass
-public class Person {
+public abstract class Person {
+
+    @Id @Setter
+    @GeneratedValue
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false) @Size(min = 1)
-    private List<String> telephone;
+    @NotNull
+    @Size(min = 1)
+    @Column(nullable = false)
+    private List<@NotNull @Size(min = 8, max = 13)String> telephone;
 
     @JoinColumn(name = "address_id", unique = true ,nullable = false)
     @OneToOne(cascade = CascadeType.ALL)
