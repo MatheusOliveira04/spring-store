@@ -5,8 +5,9 @@ import git.matheusoliveira04.api.store.models.Person;
 import git.matheusoliveira04.api.store.repositories.ClientRepository;
 import git.matheusoliveira04.api.store.services.ClientService;
 import git.matheusoliveira04.api.store.services.excepitions.ObjectNotFoundException;
-import git.matheusoliveira04.api.store.services.validations.rules.AddressUniqueValidation;
-import git.matheusoliveira04.api.store.services.validations.rules.ValidationChain;
+import git.matheusoliveira04.api.store.services.validations.rules.ClientAddressUniqueValidation;
+import git.matheusoliveira04.api.store.services.validations.rules.ClientEmailUniqueValidation;
+import git.matheusoliveira04.api.store.services.validations.ValidationChain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,8 @@ public class ClientServiceImpl implements ClientService {
     private void validateAttributes(Client client) {
         ValidationChain<Person> validationChain = new ValidationChain<>(
                 List.of(
-                        new AddressUniqueValidation(clientRepository)));
+                        new ClientAddressUniqueValidation(clientRepository),
+                        new ClientEmailUniqueValidation(clientRepository)));
         validationChain.execute(client);
     }
 

@@ -12,4 +12,6 @@ public interface ClientRepository extends JpaRepository<Client, UUID> {
 
     Client findByAddress(Address address);
 
+    Client findByEmail(String email);
+
 }

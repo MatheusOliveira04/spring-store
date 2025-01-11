@@ -1,6 +1,4 @@
-package git.matheusoliveira04.api.store.services.validations.rules;
-
-import git.matheusoliveira04.api.store.services.ValidationRule;
+package git.matheusoliveira04.api.store.services.validations;
 
 import java.util.List;
 

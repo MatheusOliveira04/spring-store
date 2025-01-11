@@ -37,6 +37,7 @@ public abstract class Person {
     @Past
     private LocalDate dateOfBirth;
 
+    @Column(unique = true)
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.com$")
     private String email;
 }

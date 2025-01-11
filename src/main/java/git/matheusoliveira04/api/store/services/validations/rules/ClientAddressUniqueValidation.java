@@ -2,17 +2,16 @@ package git.matheusoliveira04.api.store.services.validations.rules;
 
 import git.matheusoliveira04.api.store.models.Person;
 import git.matheusoliveira04.api.store.repositories.ClientRepository;
-import git.matheusoliveira04.api.store.services.ValidationRule;
+import git.matheusoliveira04.api.store.services.validations.ValidationRule;
 import git.matheusoliveira04.api.store.services.excepitions.IntegrityViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AddressUniqueValidation implements ValidationRule<Person> {
+public class ClientAddressUniqueValidation implements ValidationRule<Person> {
 
     private final ClientRepository clientRepository;
 
-    public AddressUniqueValidation(ClientRepository clientRepository) {
+    public ClientAddressUniqueValidation(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
