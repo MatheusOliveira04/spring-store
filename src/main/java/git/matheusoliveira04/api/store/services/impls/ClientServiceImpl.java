@@ -1,13 +1,10 @@
 package git.matheusoliveira04.api.store.services.impls;
 
 import git.matheusoliveira04.api.store.models.Client;
-import git.matheusoliveira04.api.store.models.Person;
 import git.matheusoliveira04.api.store.repositories.ClientRepository;
 import git.matheusoliveira04.api.store.services.ClientService;
+import git.matheusoliveira04.api.store.services.excepitions.IntegrityViolationException;
 import git.matheusoliveira04.api.store.services.excepitions.ObjectNotFoundException;
-import git.matheusoliveira04.api.store.services.validations.rules.ClientAddressUniqueValidation;
-import git.matheusoliveira04.api.store.services.validations.rules.ClientEmailUniqueValidation;
-import git.matheusoliveira04.api.store.services.validations.ValidationChain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,12 +18,21 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
+    private void validateEmailIsUnique(Client client) {
+        if (client.getEmail() != null && clientRepository.findByEmail(client.getEmail()).isPresent()) {
+            throw new IntegrityViolationException("An email already exists for another client. Each client must have a unique email.");
+        }
+    }
+
+    private void validateAddressIsUnique(Client client) {
+        if (client.getAddress() != null && clientRepository.findByAddress(client.getAddress()).isPresent() ) {
+            throw new IntegrityViolationException("An address already exists for another client. Each client must have a unique address.");
+        }
+    }
+
     private void validateAttributes(Client client) {
-        ValidationChain<Person> validationChain = new ValidationChain<>(
-                List.of(
-                        new ClientAddressUniqueValidation(clientRepository),
-                        new ClientEmailUniqueValidation(clientRepository)));
-        validationChain.execute(client);
+        validateAddressIsUnique(client);
+        validateEmailIsUnique(client);
     }
 
     @Override
@@ -45,21 +51,22 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new ObjectNotFoundException("Client not found with id: " + id));
     }
 
+    @org.springframework.transaction.annotation.Transactional
     @Override
     public Client insert(Client client) {
-        this.validateAttributes(client);
+        validateAttributes(client);
         return clientRepository.save(client);
     }
 
     @Override
     public Client update(Client client) {
-        this.validateAttributes(client);
-        this.findById(client.getId());
+        validateAttributes(client);
+        findById(client.getId());
         return clientRepository.save(client);
     }
 
     @Override
     public void delete(UUID id) {
-        clientRepository.delete(this.findById(id));
+        clientRepository.delete(findById(id));
     }
 }

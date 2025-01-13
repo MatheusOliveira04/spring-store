@@ -5,6 +5,7 @@ import git.matheusoliveira04.api.store.models.dtos.ClientResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Entity(name = "tb_client")
 public class Client extends Person{
 
+    @Pattern(regexp = "\\d+")
     @Size(min = 11, max = 11)
     private String cpf;
 

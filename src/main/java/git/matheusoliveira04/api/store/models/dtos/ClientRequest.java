@@ -1,7 +1,10 @@
 package git.matheusoliveira04.api.store.models.dtos;
 
+import git.matheusoliveira04.api.store.models.Address;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -19,6 +22,7 @@ public record ClientRequest(
         @NotNull(message = "The field cannot be null")
         UUID addressId,
         LocalDate dateOfBirth,
+        @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.com$")
         String email
 ) {
 }

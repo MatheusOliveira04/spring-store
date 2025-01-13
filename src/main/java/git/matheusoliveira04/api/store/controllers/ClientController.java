@@ -1,5 +1,6 @@
 package git.matheusoliveira04.api.store.controllers;
 
+import git.matheusoliveira04.api.store.models.Address;
 import git.matheusoliveira04.api.store.models.Client;
 import git.matheusoliveira04.api.store.models.dtos.ClientRequest;
 import git.matheusoliveira04.api.store.models.dtos.ClientResponse;
