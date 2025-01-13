@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -27,7 +28,7 @@ public class Address {
 
     @Column(nullable = false) @Size(min = 2, max = 2)
     private String uf;
-
+    @Pattern(regexp = "\\d+")
     @Size(min = 8, max = 8)
     private String cep;
 
@@ -42,7 +43,7 @@ public class Address {
 
     @Column(nullable = false)
     private String description;
-
+    @Pattern(regexp = "\\d+")
     private String number;
 
     public Address(AddressRequest addressRequest) {
@@ -59,4 +60,5 @@ public class Address {
     public AddressResponse toDtoResponse() {
         return new AddressResponse(id, uf, cep, city, neighborhood, street, description, number);
     }
+
 }

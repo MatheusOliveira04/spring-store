@@ -19,14 +19,14 @@ public class CepServiceFetcherImpl implements CepServiceFetcher {
     @Override
     public void validateCep(String cep) {
         try {
-            var response = cepClient.validateCep(cep);
+            var addressClientResponse = cepClient.validateCep(cep).getBody();
 
-            if (response.getStatusCode().is4xxClientError()) {
+            if (addressClientResponse != null && addressClientResponse.getErro().equals("true")) {
                 throw new ApiClientException("ZIP code: " + cep + " not found");
             }
 
         } catch (Exception e) {
-            throw new ApiClientException("Error while finding ZIP code.");
+            throw new ApiClientException(e.getMessage());
         }
     }
 }

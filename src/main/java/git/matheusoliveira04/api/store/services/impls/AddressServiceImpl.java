@@ -21,6 +21,12 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     private CepServiceFetcher cepServiceFetcher;
 
+    private void validateCep(Address address) {
+        if (address.getCep() != null && !address.getCep().isEmpty()) {
+            cepServiceFetcher.validateCep(address.getCep());
+        }
+    }
+
     @Override
     public List<Address> findAll(Pageable pageable) {
         List<Address> addressList = addressRepository.findAll(pageable).toList();
@@ -39,18 +45,20 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address insert(Address address) {
+        validateCep(address);
         return addressRepository.save(address);
     }
 
     @Override
     public Address update(Address address) {
-        this.findById(address.getId());
+        validateCep(address);
+        findById(address.getId());
         return addressRepository.save(address);
     }
 
     @Override
     public void delete(UUID id) {
-        addressRepository.delete(this.findById(id));
+        addressRepository.delete(findById(id));
     }
 
     private void findCepValid(Address address) {
