@@ -1,7 +1,7 @@
 package git.matheusoliveira04.api.store.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.UUID;
@@ -17,4 +17,19 @@ public class Product {
     @Setter
     @Getter
     private UUID id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Pattern(regexp = "\\d+")
+    private String codeBar;
+
+    private String unitType;
+
+    @Column(nullable = false)
+    private Integer stock = 0;
+
+    @JoinColumn(name = "price_id", nullable = false)
+    @OneToOne
+    private Price price;
 }

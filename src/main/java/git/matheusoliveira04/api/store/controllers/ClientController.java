@@ -42,7 +42,7 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<ClientResponse> insert(@RequestBody @Valid ClientRequest clientRequest, UriComponentsBuilder uriComponentsBuilder) {
-        var client = new Client(clientRequest, addressService.findById(clientRequest.addressId()));
+        var client = new Client(clientRequest);
         return ResponseEntity
                 .created(uriComponentsBuilder.path("/client/{id}").buildAndExpand(client.getId()).toUri())
                 .body(clientService.insert(client).toDtoResponse());
@@ -50,7 +50,7 @@ public class ClientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ClientResponse> update(@RequestBody @Valid ClientRequest clientRequest, @PathVariable UUID id) {
-        var client = new Client(clientRequest, addressService.findById(clientRequest.addressId()));
+        var client = new Client(clientRequest);
         client.setId(id);
         return ResponseEntity.ok(clientService.update(client).toDtoResponse());
     }

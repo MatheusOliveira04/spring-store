@@ -43,7 +43,7 @@ public class Address {
 
     @Column(nullable = false)
     private String description;
-    @Pattern(regexp = "\\d+")
+
     private String number;
 
     public Address(AddressRequest addressRequest) {
