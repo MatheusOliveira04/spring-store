@@ -1,7 +1,6 @@
 package git.matheusoliveira04.api.store.services.impls;
 
 import git.matheusoliveira04.api.store.models.Client;
-import git.matheusoliveira04.api.store.repositories.AddressRepository;
 import git.matheusoliveira04.api.store.repositories.ClientRepository;
 import git.matheusoliveira04.api.store.services.AddressService;
 import git.matheusoliveira04.api.store.services.ClientService;
@@ -21,16 +20,33 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    @Autowired
-    private AddressService addressService;
+    private void validateCpfIsUnique(Client client) {
+        Client clientFound = clientRepository.findByCpf(client.getCpf());
+        if(clientFound != null && clientFound.getId() != client.getId()) {
+            throw new IntegrityViolationException("A cpf already exists for another client. Each client must have a cpf email.");
+        }
+    }
 
     private void validateEmailIsUnique(Client client) {
         if (client.getEmail() != null && !client.getEmail().isEmpty()) {
-            Client find = clientRepository.findByEmail(client.getEmail()).get();
+            Client find = clientRepository.findByEmail(client.getEmail());
             if (find != null && find.getId() != client.getId()) {
-                throw new IntegrityViolationException("An email already exists for another client. Each client must have a unique email.");
+                throw new IntegrityViolationException("An email already exists for another client. Each client must have an unique email.");
             }
         }
+    }
+
+    private void validateAddressIsUnique(Client client) {
+        Client clientFound = clientRepository.findByAddress(client.getAddress());
+        if (clientFound != null && clientFound.getId() != client.getId()) {
+            throw new IntegrityViolationException("An address already exists for another client. Each client must have an address email.");
+        }
+    }
+
+    private void validateClient(Client client) {
+        validateCpfIsUnique(client);
+        validateAddressIsUnique(client);
+        validateEmailIsUnique(client);
     }
 
     @Override
@@ -52,25 +68,20 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     @Override
     public Client insert(Client client) {
-        validateEmailIsUnique(client);
+        validateClient(client);
         return clientRepository.save(client);
     }
 
     @Transactional
     @Override
     public Client update(Client client) {
-        validateEmailIsUnique(client);
-        Client clientFound = findById(client.getId());
-        updateAddress(client, clientFound);
+        findById(client.getId());
+        validateClient(client);
         return clientRepository.save(client);
     }
 
     @Override
     public void delete(UUID id) {
         clientRepository.delete(findById(id));
-    }
-
-    private void updateAddress(Client client, Client clientFound) {
-        client.getAddress().setId(clientRepository.findByAddress(clientFound.getAddress()).get().getAddress().getId());
     }
 }

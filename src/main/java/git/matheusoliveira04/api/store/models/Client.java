@@ -7,28 +7,34 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "tb_client")
 public class Client extends Person{
 
-    @Pattern(regexp = "\\d+")
-    @NotEmpty
     @Size(min = 11, max = 11)
     @Pattern(regexp = "\\d+")
+    @Column(nullable = false)
     private String cpf;
 
-    public Client(ClientRequest clientRequest) {
-        super(clientRequest.id(), clientRequest.name(), clientRequest.telephone(), new Address(clientRequest.address()), clientRequest.dateOfBirth(), clientRequest.email());
-        this.cpf = clientRequest.cpf();
+    public Client(UUID id, String name, List<String> telephone, Address address, LocalDate dateOfBirth, String email, String cpf) {
+        super(id, name, telephone, address, dateOfBirth, email);
+        this.cpf = cpf;
+    }
+
+    public Client(ClientRequest clientRequest, Address address) {
+        this(null, clientRequest.name(), clientRequest.telephone(),
+                address, clientRequest.dateOfBirth(), clientRequest.email(), clientRequest.cpf());
     }
 
     public ClientResponse toDtoResponse() {
