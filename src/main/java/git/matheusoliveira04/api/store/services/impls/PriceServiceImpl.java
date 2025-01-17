@@ -18,7 +18,7 @@ public class PriceServiceImpl implements PriceService {
     @Autowired
     private PriceRepository priceRepository;
 
-    private void validateSalePriceIsGreaterThanCostPrice(Price price) {
+    public void validateSalePriceIsGreaterThanCostPrice(Price price) {
         if (price.getSalePrice().compareTo(price.getCostPrice()) < 0) {
             throw new IntegrityViolationException("The selling price must be greater than or equal to the cost price.");
         }

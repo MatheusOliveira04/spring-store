@@ -1,20 +1,19 @@
 package git.matheusoliveira04.api.store.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import git.matheusoliveira04.api.store.models.dtos.PriceRequest;
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Entity(name = "tb_entity")
+@Entity(name = "tb_price")
 public class Price {
 
     @Id
@@ -22,33 +21,36 @@ public class Price {
     @GeneratedValue
     private UUID id;
 
-    private BigDecimal costPrice = BigDecimal.ZERO;
+    @Column(nullable = false)
+    @DecimalMin(value = "0.0")
+    private BigDecimal costPrice;
 
-    @NotNull
-    @DecimalMin(value = "0.01")
+    @Column(nullable = false)
+    @DecimalMin(value = "0.1")
     private BigDecimal salePrice;
 
-    @NotNull
     private BigDecimal profit;
 
-    @NotNull
     private Double profitMargin;
 
     public Price(BigDecimal costPrice, BigDecimal salePrice) {
         this.costPrice = costPrice;
         this.salePrice = salePrice;
-        this.calculate();
+        this.calculateProfit();
+        this.calculateProfitMargin();
     }
 
-    public void calculate() {
+    public Price(PriceRequest priceRequest) {
+        this(priceRequest.costPrice(), priceRequest.salePrice());
+    }
+
+    public void calculateProfitMargin() {
+        this.profitMargin = profit.divide(costPrice, 2, BigDecimal.ROUND_HALF_UP).doubleValue() * 100;
+    }
+
+    private void calculateProfit() {
         if (costPrice != null && salePrice != null) {
             this.profit = salePrice.subtract(costPrice);
-
-            if (salePrice.compareTo(BigDecimal.ZERO) > 0) {
-                this.profitMargin = profit.divide(salePrice, 2, BigDecimal.ROUND_HALF_UP).doubleValue() * 100;
-            } else {
-                this.profitMargin = 0.0;
-            }
         }
     }
 
