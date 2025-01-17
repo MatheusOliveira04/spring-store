@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 public record AddressRequest(
-        UUID id,
         @NotBlank(message = "The field cannot be empty") @Size(min = 2, max = 2, message = "The field size must be between "+ 2 +" and " + 2)
         String uf,
         @Size(min = 8, max = 8, message = "The field size must be between "+ 8 +" and " + 8)

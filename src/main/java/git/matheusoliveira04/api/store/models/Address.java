@@ -13,20 +13,18 @@ import lombok.*;
 import java.util.UUID;
 
 @Getter
-@Setter
-@Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity(name = "tb_address")
 public class Address {
 
-    @Id
+    @Id @Setter
     @GeneratedValue
     private UUID id;
 
-    @Column(nullable = false) @Size(min = 2, max = 2)
+    @Column(nullable = false)
+    @Size(min = 2, max = 2)
     private String uf;
     @Pattern(regexp = "\\d+")
     @Size(min = 8, max = 8)
@@ -47,14 +45,8 @@ public class Address {
     private String number;
 
     public Address(AddressRequest addressRequest) {
-        this.id = addressRequest.id();
-        this.uf = addressRequest.uf();
-        this.cep = addressRequest.cep();
-        this.city = addressRequest.city();
-        this.neighborhood = addressRequest.neighborhood();
-        this.street = addressRequest.street();
-        this.description = addressRequest.description();
-        this.number = addressRequest.number();
+        this(null, addressRequest.uf(), addressRequest.cep(), addressRequest.city(), addressRequest.neighborhood(),
+                addressRequest.street(), addressRequest.description(), addressRequest.number());
     }
 
     public AddressResponse toDtoResponse() {
