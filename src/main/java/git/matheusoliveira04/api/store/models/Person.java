@@ -25,10 +25,9 @@ public abstract class Person {
     @Column(nullable = false)
     private String name;
 
-    @NotNull
     @Size(min = 1)
     @Column(nullable = false)
-    private List<@NotNull @Size(min = 8, max = 13)String> telephone;
+    private List<@NotNull @Size(min = 8, max = 13) @Pattern(regexp = "\\d+") String> telephone;
 
     @JoinColumn(name = "address_id", unique = true ,nullable = false)
     @OneToOne(cascade = CascadeType.ALL)

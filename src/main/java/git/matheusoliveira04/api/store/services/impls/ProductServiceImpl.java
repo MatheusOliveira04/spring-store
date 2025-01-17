@@ -2,25 +2,41 @@ package git.matheusoliveira04.api.store.services.impls;
 
 import git.matheusoliveira04.api.store.models.Product;
 import git.matheusoliveira04.api.store.repositories.ProductRepository;
+import git.matheusoliveira04.api.store.services.PriceService;
 import git.matheusoliveira04.api.store.services.ProductService;
 import git.matheusoliveira04.api.store.services.excepitions.IntegrityViolationException;
 import git.matheusoliveira04.api.store.services.excepitions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
 
     private void validateUniqueCodeBar(Product product) {
-        Product find = productRepository.findByCodeBar(product.getCodeBar()).get();
+        Product find = productRepository.findByCodeBar(product.getCodeBar());
         if (find != null && find.getId() != product.getId()) {
             throw new IntegrityViolationException("A code bar already exists for another product. Each product must have a unique code bar.");
         }
+    }
+
+    private void validateUniquePrice(Product product) {
+        Product find = productRepository.findByPrice(product.getPrice());
+        if(find != null && find.getId() != product.getId()) {
+            throw new IntegrityViolationException("A price already exists for another product. Each product must have a unique price.");
+        }
+    }
+
+    private void validateProduct(Product product) {
+        validateUniqueCodeBar(product);
+        validateUniquePrice(product);
     }
 
     @Override
@@ -39,16 +55,18 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ObjectNotFoundException("Client not found with id: " + id));
     }
 
+    @Transactional
     @Override
     public Product insert(Product product) {
-        validateUniqueCodeBar(product);
+        validateProduct(product);
         return productRepository.save(product);
     }
 
+    @Transactional
     @Override
     public Product update(Product product) {
-        findById(product.getId());
-        validateUniqueCodeBar(product);
+        Product productFound = findById(product.getId());
+        validateProduct(product);
         return productRepository.save(product);
     }
 

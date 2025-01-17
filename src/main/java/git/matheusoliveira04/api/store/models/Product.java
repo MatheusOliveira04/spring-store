@@ -1,6 +1,8 @@
 package git.matheusoliveira04.api.store.models;
 
+import git.matheusoliveira04.api.store.models.dtos.ProductRequest;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
@@ -16,20 +18,24 @@ public class Product {
     @Id
     @Setter
     @Getter
+    @GeneratedValue
     private UUID id;
 
     @Column(nullable = false)
     private String name;
 
     @Pattern(regexp = "\\d+")
+    @Column(unique = true)
     private String codeBar;
-
-    private String unitType;
 
     @Column(nullable = false)
     private Integer stock = 0;
 
-    @JoinColumn(name = "price_id", nullable = false)
-    @OneToOne
+    @JoinColumn(name = "price_id", nullable = false, unique = true)
+    @OneToOne(cascade = CascadeType.ALL)
     private Price price;
+
+    public Product(ProductRequest productRequest, Price price) {
+        this(null, productRequest.name(), productRequest.codeBar(), productRequest.stock(), price);
+    }
 }
