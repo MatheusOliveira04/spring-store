@@ -1,16 +1,15 @@
 package git.matheusoliveira04.api.store.models.dtos;
 
+import git.matheusoliveira04.api.store.models.Position;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-public record ClientRequest(
-        @NotEmpty(message = "The field cannot be empty")
-        @Size(min = 11, max = 11, message = "The field must contains 11 characters")
-        @Pattern(regexp = "\\d+", message = "The field must contain only numbers")
-        String cpf,
+public record EmployeeRequest(
+        @NotNull(message = "The field cannot be null")
+        Position position,
         @NotEmpty(message = "The field cannot be empty")
         @NotNull(message = "The field cannot be null")
         String name,

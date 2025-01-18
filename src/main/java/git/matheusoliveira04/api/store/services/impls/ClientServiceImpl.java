@@ -43,7 +43,7 @@ public class ClientServiceImpl implements ClientService {
         }
     }
 
-    private void validateClient(Client client) {
+    private void validates(Client client) {
         validateCpfIsUnique(client);
         validateAddressIsUnique(client);
         validateEmailIsUnique(client);
@@ -68,7 +68,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     @Override
     public Client insert(Client client) {
-        validateClient(client);
+        validates(client);
         return clientRepository.save(client);
     }
 
@@ -76,7 +76,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client update(Client client) {
         findById(client.getId());
-        validateClient(client);
+        validates(client);
         return clientRepository.save(client);
     }
 
