@@ -1,4 +1,4 @@
-package git.matheusoliveira04.api.store.models;
+package git.matheusoliveira04.api.store.models.enums;
 
 public enum Position {
     MANAGER(1, "Manager"),

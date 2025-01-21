@@ -1,12 +1,9 @@
 package git.matheusoliveira04.api.store.models;
 
 import git.matheusoliveira04.api.store.models.dtos.EmployeeRequest;
+import git.matheusoliveira04.api.store.models.enums.Position;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

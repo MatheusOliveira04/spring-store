@@ -1,6 +1,6 @@
 package git.matheusoliveira04.api.store.models.dtos;
 
-import git.matheusoliveira04.api.store.models.Position;
+import git.matheusoliveira04.api.store.models.enums.Position;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
