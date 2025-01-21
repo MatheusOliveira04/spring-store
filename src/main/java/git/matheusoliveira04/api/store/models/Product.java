@@ -28,6 +28,7 @@ public class Product {
     @Column(unique = true)
     private String codeBar;
 
+    @Setter
     @Column(nullable = false)
     private Integer stock = 0;
 
