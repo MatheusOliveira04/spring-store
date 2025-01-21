@@ -17,4 +17,8 @@ public interface ProductService {
     Product update(Product product);
 
     void delete(UUID id);
+
+    void subtractStock(Product product, Integer quantity);
+
+    void addStock(Product product, Integer quantity);
 }

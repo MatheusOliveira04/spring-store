@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> findAll(Pageable pageable) {
         List<Product> productList = productRepository.findAll(pageable).toList();
         if (productList.isEmpty()) {
-            throw new ObjectNotFoundException("No client found!");
+            throw new ObjectNotFoundException("No product found!");
         }
         return productList;
     }
@@ -52,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     public Product findById(UUID id) {
         return productRepository
                 .findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Client not found with id: " + id));
+                .orElseThrow(() -> new ObjectNotFoundException("Product not found with id: " + id));
     }
 
     @Transactional
@@ -73,5 +73,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(UUID id) {
         productRepository.delete(findById(id));
+    }
+
+    @Override
+    public void subtractStock(Product product, Integer quantity) {
+        if(product.getStock() < quantity) {
+            throw new IntegrityViolationException("Insufficient stock for the requested quantity.");
+        }
+        product.setStock(product.getStock() - quantity);
+    }
+
+    @Override
+    public void addStock(Product product, Integer quantity) {
+        product.setStock(product.getStock() + quantity);
     }
 }
