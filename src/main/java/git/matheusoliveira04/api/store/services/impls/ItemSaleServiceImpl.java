@@ -48,8 +48,8 @@ public class ItemSaleServiceImpl implements ItemSaleService {
     @Transactional
     public ItemSale insert(ItemSale itemSale) {
         subtractProductStock(itemSale);
-        addSaleTotalValue(itemSale);
         addSaleTotalQuantity(itemSale);
+        addSaleTotalValue(itemSale);
 
         updateProduct(itemSale.getProduct());
         updateSale(itemSale.getSale());
@@ -61,8 +61,8 @@ public class ItemSaleServiceImpl implements ItemSaleService {
     public ItemSale update(ItemSale itemSale) {
         ItemSale itemSaleFound = findById(itemSale.getId());
         updateProductStock(itemSale, itemSaleFound);
-        updateSaleTotalValue(itemSale, itemSaleFound);
         updateSaleTotalQuantity(itemSale, itemSaleFound);
+        updateSaleTotalValue(itemSale, itemSaleFound);
 
         updateProduct(itemSale.getProduct());
         updateSale(itemSale.getSale());
@@ -74,14 +74,13 @@ public class ItemSaleServiceImpl implements ItemSaleService {
     public void delete(UUID id) {
         ItemSale itemSale = findById(id);
         addProductStock(itemSale);
-        subtractSaleTotalValue(itemSale);
         subtractSaleTotalQuantity(itemSale);
+        subtractSaleTotalValue(itemSale);
 
         updateProduct(itemSale.getProduct());
         updateSale(itemSale.getSale());
         itemSaleRepository.delete(itemSale);
     }
-
 
     private void updateProduct(Product product) {
         productService.update(product);
@@ -89,24 +88,6 @@ public class ItemSaleServiceImpl implements ItemSaleService {
 
     private void updateSale(Sale sale) {
         saleService.update(sale);
-    }
-
-    private void updateSaleTotalValue(ItemSale itemSale, ItemSale itemSaleFound) {
-        int comparisonResult = itemSaleFound.getValue().compareTo(itemSale.getValue());
-
-        if (comparisonResult < 0) {
-            subtractSaleTotalValue(itemSale);
-        } else if (comparisonResult > 0) {
-            addSaleTotalValue(itemSale);
-        }
-    }
-
-    private void updateSaleTotalQuantity(ItemSale itemSale, ItemSale itemSaleFound) {
-        if (itemSaleFound.getQuantity() < itemSale.getQuantity()) {
-            subtractSaleTotalQuantity(itemSale);
-        } else if (itemSaleFound.getQuantity() > itemSale.getQuantity()) {
-            addSaleTotalQuantity(itemSale);
-        }
     }
 
     private void addSaleTotalValue(ItemSale itemSale) {
@@ -125,6 +106,16 @@ public class ItemSaleServiceImpl implements ItemSaleService {
         saleService.subtractTotalQuantity(itemSale.getSale(), itemSale.getQuantity());
     }
 
+    private void updateSaleTotalValue(ItemSale itemSale, ItemSale itemSaleFound) {
+        saleService.addTotalValue(itemSale.getSale(), itemSale.getValue(), itemSale.getQuantity());
+        saleService.subtractTotalValue(itemSale.getSale(), itemSaleFound.getValue(), itemSaleFound.getQuantity());
+    }
+
+    private void updateSaleTotalQuantity(ItemSale itemSale, ItemSale itemSaleFound) {
+        saleService.addTotalQuantity(itemSale.getSale(), itemSale.getQuantity());
+        saleService.subtractTotalQuantity(itemSale.getSale(), itemSaleFound.getQuantity());
+    }
+
     private void subtractProductStock(ItemSale itemSale) {
         productService.subtractStock(itemSale.getProduct(), itemSale.getQuantity());
     }
@@ -134,11 +125,8 @@ public class ItemSaleServiceImpl implements ItemSaleService {
     }
 
     private void updateProductStock(ItemSale itemSale, ItemSale itemSaleFound) {
-        if (itemSaleFound.getQuantity() > itemSale.getQuantity()) {
-            addProductStock(itemSale);
-        } else if (itemSaleFound.getQuantity() < itemSale.getQuantity()) {
-            subtractProductStock(itemSale);
-        }
+        addProductStock(itemSaleFound);
+        subtractProductStock(itemSale);
     }
 }
 

@@ -7,11 +7,10 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EnableFeignClients
-@EnableJpaAuditing
 @EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 @SpringBootApplication
-public class StoreApplication {
+public class
+StoreApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(StoreApplication.class, args);

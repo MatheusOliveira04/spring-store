@@ -1,6 +1,7 @@
 package git.matheusoliveira04.api.store.models;
 
 import git.matheusoliveira04.api.store.models.dtos.ItemSaleRequest;
+import git.matheusoliveira04.api.store.models.dtos.ItemSaleResponse;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Entity(name = "/tb_item_sale")
+@Entity(name = "tb_item_sale")
 public class ItemSale {
 
     @Id
@@ -21,16 +22,18 @@ public class ItemSale {
     @GeneratedValue
     private UUID id;
 
-    @Column(nullable = false)
+    @Setter
     @Min(value = 0)
+    @Column(nullable = false)
     private Integer quantity;
 
+    @Setter
     @Column(nullable = false)
     @DecimalMin(value = "0.1")
     private BigDecimal value;
 
     @JoinColumn(name = "product_id", nullable = false)
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Product product;
 
     @JoinColumn(name = "sale_id", nullable = false)
@@ -42,5 +45,9 @@ public class ItemSale {
         this.value = itemSaleRequest.value();
         this.product = product;
         this.sale = sale;
+    }
+
+    public ItemSaleResponse toDtoResponse() {
+        return new ItemSaleResponse(id, quantity, value, product, sale.toDtoResponse());
     }
 }

@@ -1,6 +1,7 @@
 package git.matheusoliveira04.api.store.models;
 
 import git.matheusoliveira04.api.store.models.dtos.SaleRequest;
+import git.matheusoliveira04.api.store.models.dtos.SaleResponse;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
@@ -25,10 +26,6 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @SequenceGenerator(name = "sale_code_seq", sequenceName = "sale_code_seq", allocationSize = 1)
-    @Column(unique = true)
-    private Long code;
-
     @Column(nullable = false)
     private String description;
 
@@ -42,8 +39,7 @@ public class Sale {
     @Min(value = 0)
     private Integer quantityTotal = 0;
 
-    @CreatedDate
-    private LocalDateTime dateTime;
+    private LocalDateTime dateTime = LocalDateTime.now();
 
     @JoinColumn(name = "employee_id", nullable = false)
     @ManyToOne
@@ -53,15 +49,14 @@ public class Sale {
     @ManyToOne
     private Client client;
 
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<ItemSale> itemSales;
-
     public Sale(SaleRequest saleRequest, Employee employee, Client client) {
         this.description = saleRequest.description();
         this.employee = employee;
         this.client = client;
     }
 
-
+    public SaleResponse toDtoResponse() {
+        return new SaleResponse(id, description, valueTotal, quantityTotal, dateTime, employee, client.toDtoResponse());
+    }
 }
 

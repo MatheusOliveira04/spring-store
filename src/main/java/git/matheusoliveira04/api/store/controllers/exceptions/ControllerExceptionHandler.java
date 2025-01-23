@@ -4,6 +4,7 @@ import git.matheusoliveira04.api.store.services.excepitions.ApiClientException;
 import git.matheusoliveira04.api.store.services.excepitions.IntegrityViolationException;
 import git.matheusoliveira04.api.store.services.excepitions.ObjectNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -33,6 +34,13 @@ public class ControllerExceptionHandler {
     public ResponseEntity<StandardError> getMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
         StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), request.getRequestURI(),
                                                 this.buildMessageOfMethodArgumentNotValidException(exception));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> getDataIntegrityViolationException(DataIntegrityViolationException exception, HttpServletRequest request) {
+        StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), request.getRequestURI(),
+                Collections.singletonList(exception.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
