@@ -16,7 +16,7 @@ public record ProductRequest(
         @Pattern(regexp = "\\d+", message = "The field must contain only numbers")
         String codeBar,
         @NotNull(message = "The field cannot be null")
-        @Min(value = 0, message = "The field must contains a minimum value of 0")
+        @Min(value = 0, message = "The field must contains a minimum amount of 0")
         Integer stock,
         @NotNull(message = "The field cannot be null")
         UUID priceId

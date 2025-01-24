@@ -91,11 +91,11 @@ public class ItemSaleServiceImpl implements ItemSaleService {
     }
 
     private void addSaleTotalValue(ItemSale itemSale) {
-        saleService.addTotalValue(itemSale.getSale(), itemSale.getValue(), itemSale.getQuantity());
+        saleService.addTotalValue(itemSale.getSale(), itemSale.getAmount(), itemSale.getQuantity());
     }
 
     private void subtractSaleTotalValue(ItemSale itemSale) {
-        saleService.subtractTotalValue(itemSale.getSale(), itemSale.getValue(), itemSale.getQuantity());
+        saleService.subtractTotalValue(itemSale.getSale(), itemSale.getAmount(), itemSale.getQuantity());
     }
 
     private void addSaleTotalQuantity(ItemSale itemSale) {
@@ -107,8 +107,8 @@ public class ItemSaleServiceImpl implements ItemSaleService {
     }
 
     private void updateSaleTotalValue(ItemSale itemSale, ItemSale itemSaleFound) {
-        saleService.addTotalValue(itemSale.getSale(), itemSale.getValue(), itemSale.getQuantity());
-        saleService.subtractTotalValue(itemSale.getSale(), itemSaleFound.getValue(), itemSaleFound.getQuantity());
+        saleService.addTotalValue(itemSale.getSale(), itemSale.getAmount(), itemSale.getQuantity());
+        saleService.subtractTotalValue(itemSale.getSale(), itemSaleFound.getAmount(), itemSaleFound.getQuantity());
     }
 
     private void updateSaleTotalQuantity(ItemSale itemSale, ItemSale itemSaleFound) {

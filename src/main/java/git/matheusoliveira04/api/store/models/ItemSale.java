@@ -30,7 +30,7 @@ public class ItemSale {
     @Setter
     @Column(nullable = false)
     @DecimalMin(value = "0.1")
-    private BigDecimal value;
+    private BigDecimal amount;
 
     @JoinColumn(name = "product_id", nullable = false)
     @ManyToOne
@@ -42,12 +42,12 @@ public class ItemSale {
 
     public ItemSale(ItemSaleRequest itemSaleRequest, Product product, Sale sale) {
         this.quantity = itemSaleRequest.quantity();
-        this.value = itemSaleRequest.value();
+        this.amount = itemSaleRequest.amount();
         this.product = product;
         this.sale = sale;
     }
 
     public ItemSaleResponse toDtoResponse() {
-        return new ItemSaleResponse(id, quantity, value, product, sale.toDtoResponse());
+        return new ItemSaleResponse(id, quantity, amount, product, sale.toDtoResponse());
     }
 }
