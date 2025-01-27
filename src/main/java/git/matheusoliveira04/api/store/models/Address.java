@@ -1,7 +1,7 @@
 package git.matheusoliveira04.api.store.models;
 
-import git.matheusoliveira04.api.store.models.dtos.AddressRequest;
-import git.matheusoliveira04.api.store.models.dtos.AddressResponse;
+import git.matheusoliveira04.api.store.models.dtos.requests.AddressRequest;
+import git.matheusoliveira04.api.store.models.dtos.responses.AddressResponse;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

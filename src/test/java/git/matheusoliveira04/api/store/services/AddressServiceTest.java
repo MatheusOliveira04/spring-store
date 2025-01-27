@@ -7,22 +7,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import git.matheusoliveira04.api.store.BaseTests;
 import git.matheusoliveira04.api.store.models.Address;
-import git.matheusoliveira04.api.store.services.excepitions.IntegrityViolationException;
 import git.matheusoliveira04.api.store.services.excepitions.ObjectNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 
 import java.util.List;
 import java.util.UUID;
 
 @Transactional
-public class AddressServiceImplTest extends BaseTests {
+public class AddressServiceTest extends BaseTests {
 
     @Autowired
     AddressService addressService;
@@ -105,6 +104,16 @@ public class AddressServiceImplTest extends BaseTests {
     }
 
     @Test
+    @DisplayName("Test find all with pageable path variable success using size one")
+    @Sql({"classpath:/sqls/address.sql"})
+    void findAllTestWithPageableOneSize() {
+        List<Address> addressList = addressService.findAll(PageRequest.ofSize(1));
+        assertNotNull(addressList);
+        assertFalse(addressList.isEmpty());
+        assertEquals(1, addressList.size());
+    }
+
+    @Test
     @DisplayName("Test find existing id error, not found address with id")
     void findByIdTestErrorNotFound() {
         var exception = assertThrows(ObjectNotFoundException.class,
@@ -120,4 +129,25 @@ public class AddressServiceImplTest extends BaseTests {
                 () -> addressService.findAll(PageRequest.ofSize(Integer.MAX_VALUE)));
         assertEquals("No address found!", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("Test insert new address error, with uf column is null, throw exception DataIntegrityViolationException")
+    void insertTestErrorUfColumnNull() {
+       /* var exception = assertThrows(DataIntegrityViolationException.class, () -> {
+            addressService.insert(new Address(null, null, "12345679", "Tubarão",
+                    "Central", "Rua B", "Address teste 2", "121"));
+        });
+        System.out.println(exception.toString());
+        assertEquals("No address found!", exception.toString());
+*/
+       var address = addressService.insert(new Address(null, null, "12345679", "Tubarão",
+                "Central", "Rua B", "Address teste 2", "121"));
+
+        var addressFound = addressService.findById(address.getId());
+        assertNotNull(addressFound);
+        System.out.println("------");
+        System.out.println(addressFound.getUf());
+
+    }
+
 }
