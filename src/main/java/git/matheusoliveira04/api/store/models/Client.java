@@ -1,13 +1,9 @@
 package git.matheusoliveira04.api.store.models;
 
-import git.matheusoliveira04.api.store.models.dtos.ClientRequest;
-import git.matheusoliveira04.api.store.models.dtos.ClientResponse;
+import git.matheusoliveira04.api.store.models.dtos.requests.ClientRequest;
+import git.matheusoliveira04.api.store.models.dtos.responses.ClientResponse;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;

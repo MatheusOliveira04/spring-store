@@ -1,6 +1,6 @@
 package git.matheusoliveira04.api.store.models;
 
-import git.matheusoliveira04.api.store.models.dtos.EmployeeRequest;
+import git.matheusoliveira04.api.store.models.dtos.requests.EmployeeRequest;
 import git.matheusoliveira04.api.store.models.enums.Position;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

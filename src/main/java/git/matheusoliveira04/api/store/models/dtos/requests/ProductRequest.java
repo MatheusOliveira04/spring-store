@@ -1,7 +1,5 @@
-package git.matheusoliveira04.api.store.models.dtos;
+package git.matheusoliveira04.api.store.models.dtos.requests;
 
-import git.matheusoliveira04.api.store.models.Price;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

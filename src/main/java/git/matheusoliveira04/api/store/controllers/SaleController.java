@@ -1,8 +1,8 @@
 package git.matheusoliveira04.api.store.controllers;
 
 import git.matheusoliveira04.api.store.models.Sale;
-import git.matheusoliveira04.api.store.models.dtos.SaleRequest;
-import git.matheusoliveira04.api.store.models.dtos.SaleResponse;
+import git.matheusoliveira04.api.store.models.dtos.requests.SaleRequest;
+import git.matheusoliveira04.api.store.models.dtos.responses.SaleResponse;
 import git.matheusoliveira04.api.store.services.ClientService;
 import git.matheusoliveira04.api.store.services.EmployeeService;
 import git.matheusoliveira04.api.store.services.SaleService;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -30,6 +31,7 @@ public class SaleController {
     @Autowired
     private ClientService clientService;
 
+    @Secured({"ROLE_USER"})
     @GetMapping
     public ResponseEntity<List<SaleResponse>> findAll(@PageableDefault(sort = "code") Pageable pageable) {
         return ResponseEntity.ok(saleService.findAll(pageable)
@@ -38,11 +40,13 @@ public class SaleController {
                 .toList());
     }
 
+    @Secured({"ROLE_USER"})
     @GetMapping("/{id}")
     public ResponseEntity<SaleResponse> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(saleService.findById(id).toDtoResponse());
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PostMapping
     public ResponseEntity<SaleResponse> insert(@RequestBody @Valid SaleRequest saleRequest, UriComponentsBuilder uriComponentsBuilder) {
         Sale sale = new Sale(saleRequest, employeeService.findById(saleRequest.employeeId()), clientService.findById(saleRequest.clientId()));
@@ -51,6 +55,7 @@ public class SaleController {
                 .body(saleService.insert(sale).toDtoResponse());
     }
 
+    @Secured({"ROLE_ADMIN"})
     @PutMapping("/{id}")
     public ResponseEntity<SaleResponse> update(@RequestBody @Valid SaleRequest saleRequest, @PathVariable UUID id) {
         Sale sale = new Sale(saleRequest, employeeService.findById(saleRequest.employeeId()), clientService.findById(saleRequest.clientId()));
@@ -58,6 +63,7 @@ public class SaleController {
         return ResponseEntity.ok(saleService.update(sale).toDtoResponse());
     }
 
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         saleService.delete(id);

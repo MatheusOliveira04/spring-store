@@ -1,6 +1,5 @@
-package git.matheusoliveira04.api.store.models.dtos;
+package git.matheusoliveira04.api.store.models.dtos.responses;
 
-import git.matheusoliveira04.api.store.models.Client;
 import git.matheusoliveira04.api.store.models.Employee;
 
 import java.math.BigDecimal;

@@ -1,10 +1,8 @@
 package git.matheusoliveira04.api.store.models;
 
-import git.matheusoliveira04.api.store.models.dtos.PriceRequest;
+import git.matheusoliveira04.api.store.models.dtos.requests.PriceRequest;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;

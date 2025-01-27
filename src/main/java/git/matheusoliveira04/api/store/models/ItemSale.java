@@ -1,7 +1,7 @@
 package git.matheusoliveira04.api.store.models;
 
-import git.matheusoliveira04.api.store.models.dtos.ItemSaleRequest;
-import git.matheusoliveira04.api.store.models.dtos.ItemSaleResponse;
+import git.matheusoliveira04.api.store.models.dtos.requests.ItemSaleRequest;
+import git.matheusoliveira04.api.store.models.dtos.responses.ItemSaleResponse;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;

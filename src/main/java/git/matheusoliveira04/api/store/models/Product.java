@@ -1,8 +1,7 @@
 package git.matheusoliveira04.api.store.models;
 
-import git.matheusoliveira04.api.store.models.dtos.ProductRequest;
+import git.matheusoliveira04.api.store.models.dtos.requests.ProductRequest;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
@@ -17,7 +16,6 @@ public class Product {
 
     @Id
     @Setter
-    @Getter
     @GeneratedValue
     private UUID id;
 

@@ -1,10 +1,8 @@
-package git.matheusoliveira04.api.store.models.dtos;
+package git.matheusoliveira04.api.store.models.dtos.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-import java.util.UUID;
 
 public record AddressRequest(
         @NotBlank(message = "The field cannot be empty") @Size(min = 2, max = 2, message = "The field size must be between "+ 2 +" and " + 2)

@@ -1,4 +1,4 @@
-package git.matheusoliveira04.api.store.models.dtos;
+package git.matheusoliveira04.api.store.models.dtos.requests;
 
 import jakarta.validation.constraints.*;
 
